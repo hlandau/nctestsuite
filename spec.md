@@ -7,7 +7,7 @@ Each entry consists of a series of lines:
 
     Entry:
       One or more of:
-        "IN"
+        "IN"    [test-id]
         name              (e.g. "d/example")
         value             (in JSON form, on one line)
 
@@ -27,6 +27,8 @@ Each entry consists of a series of lines:
       Implementations should ignore tags they do not understand.
       Tags will always begin with an uppercase character at the start of a line and be terminated
       by a space.
+
+      The first IN line of an entry may optionally contain a test ID to identify the test.
 
 Blank lines and lines starting with # are ignored.
 

@@ -1,51 +1,51 @@
-IN
+IN empty
 d/example
 {}
 OUT
 
 # IPv4
 
-IN
+IN ipv4-bare
 d/example
 {"ip":"1.2.3.4"}
 OUT
 example.bit. IN A 1.2.3.4
 
-IN
+IN ipv4-array
 d/example
 {"ip":["1.2.3.4"]}
 OUT
 example.bit. IN A 1.2.3.4
 
-IN
+IN ipv4-array-2
 d/example
 {"ip":["1.2.3.4","5.6.7.8"]}
 OUT
 example.bit. IN A 1.2.3.4
 example.bit. IN A 5.6.7.8
 
-IN
+IN ipv4-array-empty
 d/example
 {"ip":[]}
 OUT
 
-IN
+IN ipv4-bare-invalid
 d/example
 {"ip":"invalid"}
 OUT
 
-IN
+IN ipv4-array-invalid
 d/example
 {"ip":["invalid"]}
 OUT
 
-IN
+IN ipv4-array-trailing-invalid
 d/example
 {"ip":["1.2.3.4","invalid"]}
 OUT
 example.bit. IN A 1.2.3.4
 
-IN
+IN ipv4-array-leading-invalid
 d/example
 {"ip":["invalid","1.2.3.4"]}
 OUT
@@ -53,87 +53,87 @@ example.bit. IN A 1.2.3.4
 
 # IPv6
 
-IN
+IN ipv6-bare
 d/example
 {"ip6":"1234:5678::abcd:fedb"}
 OUT
 example.bit. IN AAAA 1234:5678::abcd:fedb
 
-IN
+IN ipv6-array
 d/example
 {"ip6":["1234:5678::abcd:fedb"]}
 OUT
 example.bit. IN AAAA 1234:5678::abcd:fedb
 
-IN
+IN ipv6-array-2
 d/example
 {"ip6":["1234:5678::abcd:fedb","2222:3333:4444:5555:1111:2222:3333:4444"]}
 OUT
 example.bit. IN AAAA 1234:5678::abcd:fedb
 example.bit. IN AAAA 2222:3333:4444:5555:1111:2222:3333:4444
 
-IN
+IN ipv6-bare-invalid
 d/example
 {"ip6":"invalid"}
 OUT
 
-IN
+IN ipv6-array-invalid
 d/example
 {"ip6":["invalid"]}
 OUT
 
-IN
+IN ipv6-array-trailing-invalid
 d/example
 {"ip6":["1234:5678::abcd:fedb", "invalid"}
 OUT
 example.bit. IN AAAA 1234:5678::abcd:fedb
 
-IN
+IN ipv6-array-leading-invalid
 d/example
 {"ip6":["invalid", "1234:5678::abcd:fedb"]}
 OUT
 example.bit. IN AAAA 1234:5678::abcd:fedb
 
-IN
+IN ipv6-array-ipv4-notation
 d/example
 {"ip6":["::beef:1.2.3.4"]}
 OUT
-example.bit. IN AAAA ::beef:0102:0304
+example.bit. IN AAAA ::beef:102:304
 
 # NS
 
-IN
+IN ns-bare
 d/example
 {"ns":"ns1.example.com."}
 OUT
 example.bit. IN NS ns1.example.com.
 
-IN
+IN ns-array
 d/example
 {"ns":["ns1.example.com."]}
 OUT
 example.bit. IN NS ns1.example.com.
 
-IN
+IN ns-array-2
 d/example
 {"ns":["ns1.example.com.","ns2.example.com."]}
 OUT
 example.bit. IN NS ns1.example.com.
 example.bit. IN NS ns2.example.com.
 
-IN
+IN ns-array-trailing-invalid
 d/example
 {"ns":["ns1.example.com.", "ns1$invalid"]}
 OUT
 example.bit. IN NS ns1.example.com.
 
-IN
+IN ns-array-leading-invalid
 d/example
 {"ns":["ns1$invalid", "ns1.example.com."]}
 OUT
 example.bit. IN NS ns1.example.com.
 
-IN
+IN ns-and-ip
 d/example
 {"ns":["ns1.example.com."],"ip":"1.2.3.4"}
 OUT
@@ -141,24 +141,24 @@ example.bit. IN NS ns1.example.com.
 
 # CNAME
 
-IN
+IN cname
 d/example
 {"alias":"example2.bit."}
 OUT
 example.bit. IN CNAME example2.bit.
 
-IN
+IN cname-invalid
 d/example
 {"alias":"example$invalid.bit."}
 OUT
 
-IN
+IN cname-and-ip
 d/example
 {"alias":"example2.bit.","ip":"1.2.3.4"}
 OUT
 example.bit. IN CNAME example2.bit.
 
-IN
+IN cname-and-ns-and-ip
 d/example
 {"ns":["ns1.example.com."],"alias":"example2.bit.","ip":"1.2.3.4"}
 OUT
@@ -166,30 +166,36 @@ example.bit. IN NS ns1.example.com.
 
 # DNAME
 
-IN
+IN dname
 d/example
 {"translate":"example2.bit."}
 OUT
 example.bit. IN DNAME example2.bit.
 
-IN
+IN dname-invalid
 d/example
 {"translate":"example$invalid.bit."}
 OUT
 
-IN
+IN dname-and-cname
 d/example
 {"translate":"example2.bit.","alias":"example3.bit."}
 OUT
 example.bit. IN DNAME example2.bit.
 
-IN
+IN dname-and-ip
 d/example
 {"translate":"example2.bit.","ip":"1.2.3.4"}
 OUT
 example.bit. IN DNAME example2.bit.
 
-IN
+IN dname-and-ns
+d/example
+{"ns":["ns1.example.com."],"translate":"example2.bit."}
+OUT
+example.bit. IN NS ns1.example.com.
+
+IN dname-and-cname-and-ns
 d/example
 {"ns":["ns1.example.com."],"ip":"1.2.3.4","translate":"example2.bit."}
 OUT
@@ -197,30 +203,30 @@ example.bit. IN NS ns1.example.com.
 
 # DS
 
-IN
+IN ds-empty
 d/example
 {"ds":[]}
 OUT
 
-IN
+IN ds-malformed
 d/example
 {"ds":[[]]}
 OUT
 
-IN
+IN ds-array
 d/example
 {"ds":[[12345,8,2,"Dq/dL53lEyByJK+5s/MeVGye8SBsBtRv3glSUjcIz28="]]}
 OUT
 example.bit. IN DS 12345 8 2 0EAFDD2F9DE513207224AFB9B3F31E546C9EF1206C06D46FDE0952523708CF6F
 
-IN
+IN ds-array-2
 d/example
 {"ds":[[54321,8,1,"9Y5W7a9gPuC/TQlBBv9e7Q=="],[12345,8,2,"Dq/dL53lEyByJK+5s/MeVGye8SBsBtRv3glSUjcIz28="]]}
 OUT
 example.bit. IN DS 54321 8 1 F58E56EDAF603EE0BF4D094106FF5EED
 example.bit. IN DS 12345 8 2 0EAFDD2F9DE513207224AFB9B3F31E546C9EF1206C06D46FDE0952523708CF6F
 
-IN
+IN ds-array-leading-invalid
 d/example
 {"ds":["invalid",[54321,8,1,"9Y5W7a9gPuC/TQlBBv9e7Q=="],[12345,8,2,"Dq/dL53lEyByJK+5s/MeVGye8SBsBtRv3glSUjcIz28="]]}
 OUT
@@ -229,63 +235,63 @@ example.bit. IN DS 12345 8 2 0EAFDD2F9DE513207224AFB9B3F31E546C9EF1206C06D46FDE0
 
 # SRV
 
-IN
+IN srv-invalid
 d/example
 {"service":"invalid"}
 OUT
 
-IN
+IN srv-array-invalid
 d/example
 {"service":["invalid"]}
 OUT
 
-IN
+IN srv-array-invalid-2
 d/example
 {"service":[["invalid"]]}
 OUT
 
-IN
+IN srv-array
 d/example
 {"service":[["http", "tcp", 0, 0, 80, "www.example.bit."]]}
 OUT
 _http._tcp.example.bit. IN SRV 0 0 80 www.example.bit.
 
-IN
+IN srv-array-2
 d/example
 {"service":[["http", "tcp", 0, 0, 80, "www.example.bit."], ["https", "tcp", 0, 0, 443, "www.example.bit."]]}
 OUT
-_http._tcp.example.bit. IN SRV 0 0 80 www example.bit.
+_http._tcp.example.bit. IN SRV 0 0 80 www.example.bit.
 _https._tcp.example.bit. IN SRV 0 0 443 www.example.bit.
 
-IN
+IN srv-array-leading-invalid
 d/example
 {"service":["invalid",["http", "tcp", 0, 0, 80, "www.example.bit."], ["https", "tcp", 0, 0, 443, "www.example.bit."]]}
 OUT
-_http._tcp.example.bit. IN SRV 0 0 80 www example.bit.
+_http._tcp.example.bit. IN SRV 0 0 80 www.example.bit.
 _https._tcp.example.bit. IN SRV 0 0 443 www.example.bit.
 
-IN
+IN srv-malformed-name
 d/example
 {"service":[["htt$p", "tcp", 0, 0, 80, "www.example.bit."], ["https", "tcp", 0, 0, 443, "www.example.bit."]]}
 OUT
 _https._tcp.example.bit. IN SRV 0 0 443 www.example.bit.
 
-IN
+IN srv-malformed-name-2
 d/example
 {"service":[["htt$p", "tcp", 0, 0, 80, "www.example.bit."], ["https", "tcp$", 0, 0, 443, "www.example.bit."]]}
 OUT
 
 # TLSA
 # TODO: Spec
-# The TLSA spec on the wiki is insane.
+# The TLSA spec on the wiki is insane. It is also stylistically inconsistent with the SRV specification.
 
-IN
+IN tlsa
 d/example
 {"tlsa":[[443,"tcp",1,2,3,"i4hXddaCCdb7+m1rFzonluIisL7S/G+ttz2PWdKH4m0="]]}
 OUT
 _443._tcp.example.bit. IN TLSA 1 2 3 8B885775D68209D6FBFA6D6B173A2796E222B0BED2FC6FADB73D8F59D287E26D
 
-IN
+IN tlsa-2
 d/example
 {"tlsa":[[123,"tcp",5,6,7,"8NZ2TMU7NpNBcPMndnLYM57Mq6xroudlcf3s3xn6N8U="],[443,"tcp",1,2,3,"i4hXddaCCdb7+m1rFzonluIisL7S/G+ttz2PWdKH4m0="],[443,"tcp",2,3,4,"7/GNWcMOOm515EZZBMZD9Dv7Nye6DHoNHCTHEDTp+pg="]]}
 OUT
@@ -295,39 +301,39 @@ _123._tcp.example.bit. IN TLSA 5 6 7 F0D6764CC53B36934170F3277672D8339ECCABAC6BA
 
 # Map
 
-IN
+IN map-blank
 d/example
 {"ip":"1.2.3.4","map":{}}
 OUT
 example.bit. IN A 1.2.3.4
 
-IN
+IN map-empty-precedence
 d/example
 {"ip":"1.2.3.4","map":{"":{"ip":"2.3.4.5"}}}
 OUT
 example.bit. IN A 1.2.3.4
 
-IN
+IN map-empty-merge
 d/example
 {"ip6":"::beef","map":{"":"1.2.3.4"}}
 OUT
 example.bit. IN AAAA ::beef
 example.bit. IN A 1.2.3.4
 
-IN
+IN map-empty-ipv4-shorthand
 d/example
 {"ip":"1.2.3.4","map":{"":"2.3.4.5"}}
 OUT
 example.bit. IN A 1.2.3.4
 
-IN
+IN map-subdomain
 d/example
 {"ip":"1.2.3.4","map":{"www":{"ip":"2.3.4.5"}}}
 OUT
 example.bit. IN A 1.2.3.4
 www.example.bit. IN A 2.3.4.5
 
-IN
+IN map-subsubdomain
 d/example
 {"ip":"1.2.3.4","map":{"www":{"ip":"2.3.4.5","map":{"a":{"ip":"3.4.5.6"}}}}}
 OUT
@@ -335,7 +341,7 @@ example.bit. IN A 1.2.3.4
 www.example.bit. IN A 2.3.4.5
 a.www.example.bit. IN A 3.4.5.6
 
-IN
+IN map-wildcard
 d/example
 {"ip":"1.2.3.4","map":{"www":{"ip":"2.3.4.5"},"*":{"ip":"3.4.5.6"}}}
 OUT
@@ -343,17 +349,17 @@ example.bit. IN A 1.2.3.4
 www.example.bit. IN A 2.3.4.5
 *.example.bit. IN A 3.4.5.6
 
-IN
+IN map-subdomain-wildcard
 d/example
 {"ip":"1.2.3.4","map":{"www":{"ip":"2.3.4.5","map":{"*":{"ip":"3.4.5.6"}}}}}
 OUT
-example.com. IN A 1.2.3.4
-www.example.com. IN A 2.3.4.5
-*.www.example.com. IN A 3.4.5.6
+example.bit. IN A 1.2.3.4
+www.example.bit. IN A 2.3.4.5
+*.www.example.bit. IN A 3.4.5.6
 
 # NS with Glue
 
-IN
+IN ns-with-glue
 d/example
 {"ns":["ns1.example.bit.","ns2.example.bit."],"map":{"ns1":{"ip":"1.2.3.4","ip6":"::dead"},"ns2":{"ip":"2.3.4.5","ip6":"::beef"}}}
 OUT
@@ -366,7 +372,7 @@ AD ns2.example.bit. IN AAAA ::beef
 
 # Imports
 
-IN
+IN import
 d/example
 {"import":"d/example2"}
 IN
@@ -375,7 +381,7 @@ d/example2
 OUT
 example.bit. IN A 1.2.3.4
 
-IN
+IN import-precedence
 d/example
 {"import":"d/example2","ip":"2.3.4.5"}
 IN
@@ -384,7 +390,7 @@ d/example2
 OUT
 example.bit. IN A 2.3.4.5
 
-IN
+IN import-merge
 d/example
 {"import":"d/example2","ip":"1.2.3.4"}
 IN
@@ -394,7 +400,7 @@ OUT
 example.bit. IN A 1.2.3.4
 example.bit. IN AAAA ::beef
 
-IN
+IN double-import
 d/example
 {"import":"d/example2","ip":"1.2.3.4"}
 IN
@@ -408,7 +414,7 @@ example.bit. IN A 1.2.3.4
 example.bit. IN AAAA ::beef
 _http._tcp.example.bit. IN SRV 0 0 80 www.example.bit.
 
-IN
+IN import-array1-form
 d/example
 {"import":["d/example2"],"ip":"1.2.3.4"}
 IN
@@ -418,7 +424,7 @@ OUT
 example.bit. IN A 1.2.3.4
 example.bit. IN AAAA ::beef
 
-IN
+IN import-array2-form
 d/example
 {"import":["d/example2",""],"ip":"1.2.3.4"}
 IN
@@ -428,7 +434,7 @@ OUT
 example.bit. IN A 1.2.3.4
 example.bit. IN AAAA ::beef
 
-IN
+IN import-invalid-form
 d/example
 {"import":["d/example2","",""],"ip":"1.2.3.4"}
 IN
@@ -439,13 +445,13 @@ example.bit. IN A 1.2.3.4
 
 # Ignore recursive references
 
-IN
+IN import-self-recursion
 d/example
 {"import":["d/example"],"ip":"1.2.3.4"}
 OUT
 example.bit. IN A 1.2.3.4
 
-IN
+IN import-twopoint-recursion
 d/example
 {"import":["d/example2"],"ip":"1.2.3.4"}
 IN
@@ -455,7 +461,7 @@ OUT
 example.bit. IN A 1.2.3.4
 example.bit. IN AAAA ::beef
 
-IN
+IN import-one-twopoint-recursion
 d/example
 {"import":["d/example2"],"ip":"1.2.3.4"}
 IN
@@ -470,7 +476,7 @@ example.bit. IN AAAA ::beef
 
 # Subreferences
 
-IN
+IN import-subreference
 d/example
 {"import":["d/example2","www"],"ip":"1.2.3.4"}
 IN
@@ -482,7 +488,7 @@ example.bit. IN AAAA ::beef
 
 # Subsubreferences
 
-IN
+IN import-subsubreference
 d/example
 {"import":["d/example2", "a.www"],"ip":1.2.3.4"}
 IN
@@ -498,7 +504,7 @@ example.bit. IN AAAA ::3
 
 # Delegation
 
-IN
+IN delegate-bare
 d/example
 {"delegate":"d/example2"}
 IN
@@ -507,7 +513,7 @@ d/example2
 OUT
 example.bit. IN A 1.2.3.4
 
-IN
+IN delegate-precedence
 d/example
 {"delegate":"d/example2","ip":"2.3.4.5"}
 IN
@@ -516,7 +522,7 @@ d/example2
 OUT
 example.bit. IN A 1.2.3.4
 
-IN
+IN delegate-nomerge
 d/example
 {"delegate":"d/example2","ip":"1.2.3.4"}
 IN
@@ -525,7 +531,7 @@ d/example2
 OUT
 example.bit. IN AAAA ::beef
 
-IN
+IN double-delegate-nomerge
 d/example
 {"delegate":"d/example2","ip":"1.2.3.4"}
 IN
@@ -537,7 +543,7 @@ d/example3
 OUT
 _http._tcp.example.bit. IN SRV 0 0 80 www.example.bit.
 
-IN
+IN delegate-array-nomerge
 d/example
 {"delegate":["d/example2"],"ip":"1.2.3.4"}
 IN
@@ -546,7 +552,7 @@ d/example2
 OUT
 example.bit. IN AAAA ::beef
 
-IN
+IN delegate-array2-nomerge
 d/example
 {"delegate":["d/example2",""],"ip":"1.2.3.4"}
 IN
@@ -555,7 +561,7 @@ d/example2
 OUT
 example.bit. IN AAAA ::beef
 
-IN
+IN delegate-invalid
 d/example
 {"delegate":["d/example2","",""],"ip":"1.2.3.4"}
 IN
@@ -566,12 +572,12 @@ example.bit. IN A 1.2.3.4
 
 # Ignore recursive references
 
-IN
+IN delegate-self-recursion
 d/example
 {"delegate":["d/example"],"ip":"1.2.3.4"}
 OUT
 
-IN
+IN delegate-twopoint-recursion
 d/example
 {"delegate":["d/example2"],"ip":"1.2.3.4"}
 IN
@@ -579,7 +585,7 @@ d/example2
 {"delegate":["d/example"],"ip6":"::beef"}
 OUT
 
-IN
+IN delegate-one-twopoint-recursion
 d/example
 {"delegate":["d/example2"],"ip":"1.2.3.4"}
 IN
@@ -592,7 +598,7 @@ OUT
 
 # Subreferences
 
-IN
+IN delegate-subreference
 d/example
 {"delegate":["d/example2","www"],"ip":"1.2.3.4"}
 IN
@@ -603,7 +609,7 @@ example.bit. IN AAAA ::beef
 
 # Subsubreferences
 
-IN
+IN delegate-subsubreference
 d/example
 {"delegate":["d/example2", "a.www"],"ip":1.2.3.4"}
 IN
@@ -615,7 +621,7 @@ example.bit. IN AAAA ::3
 # Importation must not occlude any record sets with different owner names
 # (i.e. SRV, TLSA)
 
-IN
+IN import-srv-occlusion
 d/example
 {"import":"d/example2","service":[["http","tcp",0,0,80,"www.example.bit."]]}
 IN
@@ -625,7 +631,7 @@ OUT
 _http._tcp.example.bit. IN SRV 0 0 80 www.example.bit.
 _https._tcp.example.bit. IN SRV 0 0 443 www.example.bit.
 
-IN
+IN import-srv-occlusion-2
 d/example
 {"import":"d/example2","service":[["http","tcp",0,0,80,"www.example.bit."]]}
 IN
