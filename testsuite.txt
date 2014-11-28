@@ -641,3 +641,59 @@ OUT
 _http._tcp.example.bit. IN SRV 0 0 80 www.example.bit.
 _https._tcp.example.bit. IN SRV 0 0 443 www.example.bit.
 
+# Relative names
+
+IN relname-empty
+d/example
+{"map":{"www":{"alias":""}}}
+OUT
+www.example.bit. IN CNAME example.bit.
+
+IN relname-sub-empty
+d/example
+{"map":{"a":{ "map":{"www":{"alias":""}}  }}}
+OUT
+www.a.example.bit. IN CNAME a.example.bit.
+
+IN relname-sub-abs
+d/example
+{"map":{"a":{ "map":{"www":{"alias":"example2.bit."}}}}}
+OUT
+www.a.example.bit. IN CNAME example2.bit.
+
+IN relname-single
+d/example
+{"map":{"a":{"alias":"b"}}}
+OUT
+a.example.bit. IN CNAME b.example.bit.
+
+IN relname-double
+d/example
+{"map":{"a":{"alias":"x.y"}}}
+OUT
+a.example.bit. IN CNAME x.y.example.bit.
+
+IN relname-sub-single
+d/example
+{"map":{"a":{ "map":{"b":{ "alias": "x" }}}}}
+OUT
+b.a.example.bit. IN CNAME x.a.example.bit.
+
+IN relname-sub-double
+d/example
+{"map":{"a":{ "map":{"b":{ "alias": "x.y" }}}}}
+OUT
+b.a.example.bit. IN CNAME x.y.a.example.bit.
+
+IN relname-at
+d/example
+{"alias": "a.@" }
+OUT
+example.bit. IN CNAME a.example.bit.
+
+IN relname-sub-at
+d/example
+{"map": { "a": { "map": { "b": { "alias": "c.@" }}}}}
+OUT
+b.a.example.bit. IN CNAME c.example.bit.
+
