@@ -374,27 +374,27 @@ AD ns2.example.bit. IN AAAA ::beef
 
 IN import
 d/example
-{"import":"d/example2"}
+{"import":"s/example2"}
 IN
-d/example2
+s/example2
 {"ip":"1.2.3.4"}
 OUT
 example.bit. IN A 1.2.3.4
 
 IN import-precedence
 d/example
-{"import":"d/example2","ip":"2.3.4.5"}
+{"import":"s/example2","ip":"2.3.4.5"}
 IN
-d/example2
+s/example2
 {"ip":"1.2.3.4"}
 OUT
 example.bit. IN A 2.3.4.5
 
 IN import-merge
 d/example
-{"import":"d/example2","ip":"1.2.3.4"}
+{"import":"s/example2","ip":"1.2.3.4"}
 IN
-d/example2
+s/example2
 {"ip6":"::beef"}
 OUT
 example.bit. IN A 1.2.3.4
@@ -402,12 +402,12 @@ example.bit. IN AAAA ::beef
 
 IN double-import
 d/example
-{"import":"d/example2","ip":"1.2.3.4"}
+{"import":"s/example2","ip":"1.2.3.4"}
 IN
-d/example2
-{"import":"d/example3","ip6":"::beef"}
+s/example2
+{"import":"s/example3","ip6":"::beef"}
 IN
-d/example3
+s/example3
 {"service":[["http","tcp",0,0,80,"www.example.bit."]]}
 OUT
 example.bit. IN A 1.2.3.4
@@ -416,9 +416,9 @@ _http._tcp.example.bit. IN SRV 0 0 80 www.example.bit.
 
 IN import-array1-form
 d/example
-{"import":["d/example2"],"ip":"1.2.3.4"}
+{"import":["s/example2"],"ip":"1.2.3.4"}
 IN
-d/example2
+s/example2
 {"ip6":"::beef"}
 OUT
 example.bit. IN A 1.2.3.4
@@ -426,9 +426,9 @@ example.bit. IN AAAA ::beef
 
 IN import-array2-form
 d/example
-{"import":["d/example2",""],"ip":"1.2.3.4"}
+{"import":["s/example2",""],"ip":"1.2.3.4"}
 IN
-d/example2
+s/example2
 {"ip6":"::beef"}
 OUT
 example.bit. IN A 1.2.3.4
@@ -436,9 +436,9 @@ example.bit. IN AAAA ::beef
 
 IN import-invalid-form
 d/example
-{"import":["d/example2","",""],"ip":"1.2.3.4"}
+{"import":["s/example2","",""],"ip":"1.2.3.4"}
 IN
-d/example2
+s/example2
 {"ip6":"::beef"}
 OUT
 example.bit. IN A 1.2.3.4
@@ -453,9 +453,9 @@ example.bit. IN A 1.2.3.4
 
 IN import-twopoint-recursion
 d/example
-{"import":["d/example2"],"ip":"1.2.3.4"}
+{"import":["s/example2"],"ip":"1.2.3.4"}
 IN
-d/example2
+s/example2
 {"import":["d/example"],"ip6":"::beef"}
 OUT
 example.bit. IN A 1.2.3.4
@@ -463,13 +463,13 @@ example.bit. IN AAAA ::beef
 
 IN import-one-twopoint-recursion
 d/example
-{"import":["d/example2"],"ip":"1.2.3.4"}
+{"import":["s/example2"],"ip":"1.2.3.4"}
 IN
-d/example2
-{"import":["d/example3"],"ip6":"::beef"}
+s/example2
+{"import":["s/example3"],"ip6":"::beef"}
 IN
-d/example3
-{"import":["d/example2"]}
+s/example3
+{"import":["s/example2"]}
 OUT
 example.bit. IN A 1.2.3.4
 example.bit. IN AAAA ::beef
@@ -478,9 +478,9 @@ example.bit. IN AAAA ::beef
 
 IN import-subreference
 d/example
-{"import":["d/example2","www"],"ip":"1.2.3.4"}
+{"import":["s/example2","www"],"ip":"1.2.3.4"}
 IN
-d/example2
+s/example2
 {"ip6":"::dead","map":{"www":{ "ip6":"::beef" }}}
 OUT
 example.bit. IN A 1.2.3.4
@@ -490,9 +490,9 @@ example.bit. IN AAAA ::beef
 
 IN import-subsubreference
 d/example
-{"import":["d/example2", "a.www"],"ip":1.2.3.4"}
+{"import":["s/example2", "a.www"],"ip":1.2.3.4"}
 IN
-d/example2
+s/example2
 {"ip6":"::1","map":{"www":{ "ip6":"::2", "map":{ "a": { "ip6":"::3" } }}}}
 OUT
 example.bit. IN A 1.2.3.4
@@ -506,66 +506,66 @@ example.bit. IN AAAA ::3
 
 IN delegate-bare
 d/example
-{"delegate":"d/example2"}
+{"delegate":"s/example2"}
 IN
-d/example2
+s/example2
 {"ip":"1.2.3.4"}
 OUT
 example.bit. IN A 1.2.3.4
 
 IN delegate-precedence
 d/example
-{"delegate":"d/example2","ip":"2.3.4.5"}
+{"delegate":"s/example2","ip":"2.3.4.5"}
 IN
-d/example2
+s/example2
 {"ip":"1.2.3.4"}
 OUT
 example.bit. IN A 1.2.3.4
 
 IN delegate-nomerge
 d/example
-{"delegate":"d/example2","ip":"1.2.3.4"}
+{"delegate":"s/example2","ip":"1.2.3.4"}
 IN
-d/example2
+s/example2
 {"ip6":"::beef"}
 OUT
 example.bit. IN AAAA ::beef
 
 IN double-delegate-nomerge
 d/example
-{"delegate":"d/example2","ip":"1.2.3.4"}
+{"delegate":"s/example2","ip":"1.2.3.4"}
 IN
-d/example2
-{"delegate":"d/example3","ip6":"::beef"}
+s/example2
+{"delegate":"s/example3","ip6":"::beef"}
 IN
-d/example3
+s/example3
 {"service":[["http","tcp",0,0,80,"www.example.bit."]]}
 OUT
 _http._tcp.example.bit. IN SRV 0 0 80 www.example.bit.
 
 IN delegate-array-nomerge
 d/example
-{"delegate":["d/example2"],"ip":"1.2.3.4"}
+{"delegate":["s/example2"],"ip":"1.2.3.4"}
 IN
-d/example2
+s/example2
 {"ip6":"::beef"}
 OUT
 example.bit. IN AAAA ::beef
 
 IN delegate-array2-nomerge
 d/example
-{"delegate":["d/example2",""],"ip":"1.2.3.4"}
+{"delegate":["s/example2",""],"ip":"1.2.3.4"}
 IN
-d/example2
+s/example2
 {"ip6":"::beef"}
 OUT
 example.bit. IN AAAA ::beef
 
 IN delegate-invalid
 d/example
-{"delegate":["d/example2","",""],"ip":"1.2.3.4"}
+{"delegate":["s/example2","",""],"ip":"1.2.3.4"}
 IN
-d/example2
+s/example2
 {"ip6":"::beef"}
 OUT
 example.bit. IN A 1.2.3.4
@@ -579,30 +579,30 @@ OUT
 
 IN delegate-twopoint-recursion
 d/example
-{"delegate":["d/example2"],"ip":"1.2.3.4"}
+{"delegate":["s/example2"],"ip":"1.2.3.4"}
 IN
-d/example2
+s/example2
 {"delegate":["d/example"],"ip6":"::beef"}
 OUT
 
 IN delegate-one-twopoint-recursion
 d/example
-{"delegate":["d/example2"],"ip":"1.2.3.4"}
+{"delegate":["s/example2"],"ip":"1.2.3.4"}
 IN
-d/example2
-{"delegate":["d/example3"],"ip6":"::beef"}
+s/example2
+{"delegate":["s/example3"],"ip6":"::beef"}
 IN
-d/example3
-{"delegate":["d/example2"]}
+s/example3
+{"delegate":["s/example2"]}
 OUT
 
 # Subreferences
 
 IN delegate-subreference
 d/example
-{"delegate":["d/example2","www"],"ip":"1.2.3.4"}
+{"delegate":["s/example2","www"],"ip":"1.2.3.4"}
 IN
-d/example2
+s/example2
 {"ip6":"::dead","map":{"www":{ "ip6":"::beef" }}}
 OUT
 example.bit. IN AAAA ::beef
@@ -611,9 +611,9 @@ example.bit. IN AAAA ::beef
 
 IN delegate-subsubreference
 d/example
-{"delegate":["d/example2", "a.www"],"ip":1.2.3.4"}
+{"delegate":["s/example2", "a.www"],"ip":1.2.3.4"}
 IN
-d/example2
+s/example2
 {"ip6":"::1","map":{"www":{ "ip6":"::2", "map":{ "a": { "ip6":"::3" } }}}}
 OUT
 example.bit. IN AAAA ::3
@@ -623,9 +623,9 @@ example.bit. IN AAAA ::3
 
 IN import-srv-occlusion
 d/example
-{"import":"d/example2","service":[["http","tcp",0,0,80,"www.example.bit."]]}
+{"import":"s/example2","service":[["http","tcp",0,0,80,"www.example.bit."]]}
 IN
-d/example2
+s/example2
 {"service":[["https","tcp",0,0,443,"www.example.bit."]]}
 OUT
 _http._tcp.example.bit. IN SRV 0 0 80 www.example.bit.
@@ -633,9 +633,9 @@ _https._tcp.example.bit. IN SRV 0 0 443 www.example.bit.
 
 IN import-srv-occlusion-2
 d/example
-{"import":"d/example2","service":[["http","tcp",0,0,80,"www.example.bit."]]}
+{"import":"s/example2","service":[["http","tcp",0,0,80,"www.example.bit."]]}
 IN
-d/example2
+s/example2
 {"service":[["http","tcp",0,0,80,"other.example.bit."],["https","tcp",0,0,443,"www.example.bit."]]}
 OUT
 _http._tcp.example.bit. IN SRV 0 0 80 www.example.bit.
