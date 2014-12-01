@@ -576,6 +576,7 @@ IN delegate-self-recursion
 d/example
 {"delegate":["d/example"],"ip":"1.2.3.4"}
 OUT
+example.bit. IN A 1.2.3.4
 
 IN delegate-twopoint-recursion
 d/example
@@ -584,6 +585,7 @@ IN
 s/example2
 {"delegate":["d/example"],"ip6":"::beef"}
 OUT
+example.bit. IN AAAA ::beef
 
 IN delegate-one-twopoint-recursion
 d/example
