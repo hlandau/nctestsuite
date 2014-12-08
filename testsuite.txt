@@ -32,23 +32,23 @@ OUT
 IN ipv4-bare-invalid
 d/example
 {"ip":"invalid"}
-OUT
+OUT 1
 
 IN ipv4-array-invalid
 d/example
 {"ip":["invalid"]}
-OUT
+OUT 1
 
 IN ipv4-array-trailing-invalid
 d/example
 {"ip":["1.2.3.4","invalid"]}
-OUT
+OUT 1
 example.bit. IN A 1.2.3.4
 
 IN ipv4-array-leading-invalid
 d/example
 {"ip":["invalid","1.2.3.4"]}
-OUT
+OUT 1
 example.bit. IN A 1.2.3.4
 
 # IPv6
@@ -75,23 +75,23 @@ example.bit. IN AAAA 2222:3333:4444:5555:1111:2222:3333:4444
 IN ipv6-bare-invalid
 d/example
 {"ip6":"invalid"}
-OUT
+OUT 1
 
 IN ipv6-array-invalid
 d/example
 {"ip6":["invalid"]}
-OUT
+OUT 1
 
 IN ipv6-array-trailing-invalid
 d/example
 {"ip6":["1234:5678::abcd:fedb", "invalid"}
-OUT
+OUT 1
 example.bit. IN AAAA 1234:5678::abcd:fedb
 
 IN ipv6-array-leading-invalid
 d/example
 {"ip6":["invalid", "1234:5678::abcd:fedb"]}
-OUT
+OUT 1
 example.bit. IN AAAA 1234:5678::abcd:fedb
 
 IN ipv6-array-ipv4-notation
@@ -124,13 +124,13 @@ example.bit. IN NS ns2.example.com.
 IN ns-array-trailing-invalid
 d/example
 {"ns":["ns1.example.com.", "ns1$invalid"]}
-OUT
+OUT 1
 example.bit. IN NS ns1.example.com.
 
 IN ns-array-leading-invalid
 d/example
 {"ns":["ns1$invalid", "ns1.example.com."]}
-OUT
+OUT 1
 example.bit. IN NS ns1.example.com.
 
 IN ns-and-ip
@@ -150,7 +150,7 @@ example.bit. IN CNAME example2.bit.
 IN cname-invalid
 d/example
 {"alias":"example$invalid.bit."}
-OUT
+OUT 1
 
 IN cname-and-ip
 d/example
@@ -175,7 +175,7 @@ example.bit. IN DNAME example2.bit.
 IN dname-invalid
 d/example
 {"translate":"example$invalid.bit."}
-OUT
+OUT 1
 
 IN dname-and-cname
 d/example
@@ -211,7 +211,7 @@ OUT
 IN ds-malformed
 d/example
 {"ds":[[]]}
-OUT
+OUT 1
 
 IN ds-array
 d/example
@@ -229,7 +229,7 @@ example.bit. IN DS 12345 8 2 0EAFDD2F9DE513207224AFB9B3F31E546C9EF1206C06D46FDE0
 IN ds-array-leading-invalid
 d/example
 {"ds":["invalid",[54321,8,1,"9Y5W7a9gPuC/TQlBBv9e7Q=="],[12345,8,2,"Dq/dL53lEyByJK+5s/MeVGye8SBsBtRv3glSUjcIz28="]]}
-OUT
+OUT 1
 example.bit. IN DS 54321 8 1 F58E56EDAF603EE0BF4D094106FF5EED
 example.bit. IN DS 12345 8 2 0EAFDD2F9DE513207224AFB9B3F31E546C9EF1206C06D46FDE0952523708CF6F
 
@@ -238,17 +238,17 @@ example.bit. IN DS 12345 8 2 0EAFDD2F9DE513207224AFB9B3F31E546C9EF1206C06D46FDE0
 IN srv-invalid
 d/example
 {"service":"invalid"}
-OUT
+OUT 1
 
 IN srv-array-invalid
 d/example
 {"service":["invalid"]}
-OUT
+OUT 1
 
 IN srv-array-invalid-2
 d/example
 {"service":[["invalid"]]}
-OUT
+OUT 1
 
 IN srv-array
 d/example
@@ -266,20 +266,20 @@ _https._tcp.example.bit. IN SRV 0 0 443 www.example.bit.
 IN srv-array-leading-invalid
 d/example
 {"service":["invalid",["http", "tcp", 0, 0, 80, "www.example.bit."], ["https", "tcp", 0, 0, 443, "www.example.bit."]]}
-OUT
+OUT 1
 _http._tcp.example.bit. IN SRV 0 0 80 www.example.bit.
 _https._tcp.example.bit. IN SRV 0 0 443 www.example.bit.
 
 IN srv-malformed-name
 d/example
 {"service":[["htt$p", "tcp", 0, 0, 80, "www.example.bit."], ["https", "tcp", 0, 0, 443, "www.example.bit."]]}
-OUT
+OUT 1
 _https._tcp.example.bit. IN SRV 0 0 443 www.example.bit.
 
 IN srv-malformed-name-2
 d/example
 {"service":[["htt$p", "tcp", 0, 0, 80, "www.example.bit."], ["https", "tcp$", 0, 0, 443, "www.example.bit."]]}
-OUT
+OUT 2
 
 # TLSA
 # TODO: Spec
@@ -443,6 +443,15 @@ s/example2
 OUT
 example.bit. IN A 1.2.3.4
 
+IN import-null-occlude
+d/example
+{"import":["s/example2"],"ip":null}
+IN
+s/example2
+{"ip":"1.2.3.4","ip6":"::beef"}
+OUT
+example.bit. IN AAAA ::beef
+
 # Ignore recursive references
 
 IN import-self-recursion
@@ -473,6 +482,25 @@ s/example3
 OUT
 example.bit. IN A 1.2.3.4
 example.bit. IN AAAA ::beef
+
+IN import-submap
+d/example
+{"map":{"www":{"ip6":"::beef","import":["s/example2"]}}}
+IN
+s/example2
+{"ip":"1.2.3.4"}
+OUT
+www.example.bit. IN A 1.2.3.4
+www.example.bit. IN AAAA ::beef
+
+IN import-empty-cname-precedence
+d/example
+{"map":{"www":{"alias":"","import":["s/example2"]}}}
+IN
+s/example2
+{"alias":"a"}
+OUT
+www.example.bit. IN CNAME example.bit.
 
 # Subreferences
 

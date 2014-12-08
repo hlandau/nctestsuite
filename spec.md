@@ -11,7 +11,7 @@ Each entry consists of a series of lines:
         name              (e.g. "d/example")
         value             (in JSON form, on one line)
 
-      "OUT"
+      "OUT" [num-errors]
       Zero or more DNS records in zone-file format
       All names used must be fully qualified with trailing dots.
       All names used must be in lowercase.
@@ -29,6 +29,8 @@ Each entry consists of a series of lines:
       by a space.
 
       The first IN line of an entry may optionally contain a test ID to identify the test.
+      The OUT line may optionally contain an error count which indicates the number of parse errors.
+      If omitted, it is taken to be zero.
 
 Blank lines and lines starting with # are ignored.
 
