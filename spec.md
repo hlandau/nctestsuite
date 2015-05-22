@@ -16,7 +16,7 @@ Each entry consists of a series of lines:
       All names used must be fully qualified with trailing dots.
       All names used must be in lowercase.
       Fields should be separated by single spaces.
-      Hexadecimal fields should be encoded in uppercase.
+      Hexadecimal fields should be encoded in lowercase.
       Each record line may be prefixed by a tag followed by a space.
       The following tags are allowed:
 
