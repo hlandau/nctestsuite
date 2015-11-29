@@ -273,20 +273,20 @@ example.bit. IN SRV 0 0 81 www2.example.bit.
 IN srv-map-array
 d/example
 {"map":{"_tcp":{"map":{"_http":{"srv":[[0,1,80,"www.example.bit."]]}, "_https":{"srv":[[0,1,443,"www.example.bit."]]}}}}}
-OUT 1
+OUT
 _http._tcp.example.bit. IN SRV 0 1 80 www.example.bit.
 _https._tcp.example.bit. IN SRV 0 1 443 www.example.bit.
 
 IN srv-malformed-name
 d/example
 {"map":{"_tcp":{"map":{"_htt$p":{"srv":[[0,1,80,"www.example.bit."]]}, "_https":{"srv":[[0,1,443,"www.example.bit."]]}}}}}
-OUT 1
+OUT
 _https._tcp.example.bit. IN SRV 0 1 443 www.example.bit.
 
 IN srv-malformed-name-2
 d/example
 {"map":{"_tc$p":{"map":{"_http":{"srv":[[0,1,80,"www.example.bit."]]}, "_https":{"srv":[[0,1,443,"www.example.bit."]]}}}}}
-OUT 1
+OUT
 
 
 # TLSA
@@ -373,16 +373,25 @@ www.example.bit. IN A 2.3.4.5
 
 # NS with Glue
 
-IN ns-with-glue
-d/example
-{"ns":["ns1.example.bit.","ns2.example.bit."],"map":{"ns1":{"ip":"1.2.3.4","ip6":"::dead"},"ns2":{"ip":"2.3.4.5","ip6":"::beef"},"ns3":{"ip":"3.4.5.6","ip6":"::cafe"}}}
-OUT
-NS example.bit. IN NS ns1.example.bit.
-NS example.bit. IN NS ns2.example.bit.
-AD ns1.example.bit. IN A 1.2.3.4
-AD ns1.example.bit. IN AAAA ::dead
-AD ns2.example.bit. IN A 2.3.4.5
-AD ns2.example.bit. IN AAAA ::beef
+## Disabled for now.
+
+# IN ns-with-glue
+# d/example
+# {"ns":["ns1.example.bit.","ns2.example.bit."],"map":{"ns1":{"ip":"1.2.3.4","ip6":"::dead"},"ns2":{"ip":"2.3.4.5","ip6":"::beef"},"ns3":{"ip":"3.4.5.6","ip6":"::cafe"}}}
+# OUT
+# NS example.bit. IN NS ns1.example.bit.
+# NS example.bit. IN NS ns2.example.bit.
+# AD ns1.example.bit. IN A 1.2.3.4
+# AD ns1.example.bit. IN AAAA ::dead
+# AD ns2.example.bit. IN A 2.3.4.5
+# AD ns2.example.bit. IN AAAA ::beef
+
+# IN ns-with-superfluous
+# d/example
+# {"ns":["ns1.example.com.","ns2.example.com."],"map":{"a":{"ip":"1.2.3.4","ip6":"::dead"}}}
+# OUT
+# NS example.bit. IN NS ns1.example.com.
+# NS example.bit. IN NS ns2.example.com.
 
 # Imports
 
@@ -422,11 +431,11 @@ dd/example2
 {"import":"dd/example3","ip6":"::beef"}
 IN
 dd/example3
-{"service":[["http","tcp",0,0,80,"www.example.bit."]]}
+{"srv":[[0,0,80,"www.example.bit."]]}
 OUT
 example.bit. IN A 1.2.3.4
 example.bit. IN AAAA ::beef
-_http._tcp.example.bit. IN SRV 0 0 80 www.example.bit.
+example.bit. IN SRV 0 0 80 www.example.bit.
 
 IN import-array1-form
 d/example
